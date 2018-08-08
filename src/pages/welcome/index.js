@@ -26,7 +26,7 @@ export default class Welcome extends Component {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Magazine' }),
+        NavigationActions.navigate({ routeName: 'user' }),
       ],
     });
 
@@ -36,7 +36,7 @@ export default class Welcome extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
         <View style={styles.logo}>
           <Image
             style={styles.img}

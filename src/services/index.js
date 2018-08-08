@@ -1,17 +1,25 @@
-export async function getMagazines() {
-  try {
-    const response = await fetch('https://app-magazine.firebaseio.com/magazines', {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "No Auth",
-        "x-access-token": token
-      },
-    });
-    const json = await response.json();
-    return json
+import * as firebase from 'firebase';
 
-  } catch (err) {
-    console.log("Error problem", err);
+export default class Services {
+  getDataBaseMagazine() {
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('magazines').once('value', (snapshot) => {
+        const response = snapshot.val();
+        let responseData = Object.keys(response).map(i => response[i]);
+
+        responseData = responseData.sort((a, b) => {
+          if (a.id > b.id) {
+            return 1;
+          }
+          if (a.id < b.id) {
+            return -1;
+          }
+          return 0;
+        });
+
+        resolve(responseData);
+      });
+    });
+
   }
 }

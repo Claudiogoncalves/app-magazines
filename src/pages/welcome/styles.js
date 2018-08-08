@@ -4,7 +4,6 @@ import { colors, metrics } from './../../styles';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
     padding: metrics.baseMargin * 2,
     justifyContent: 'center',
     alignItems: 'stretch',

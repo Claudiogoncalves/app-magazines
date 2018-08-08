@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Text, Image, Linking } from 'react-native';
-import * as firebase from 'firebase';
+import { View, FlatList, Text, Image, Linking, TouchableHighlight } from 'react-native';
+
+import Services from './../../services';
+import styles from './styles';
+
+const serviceMagazines = new Services();
 
 export default class Magazine extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -32,36 +36,36 @@ export default class Magazine extends Component {
     this.getDataBaseMagazine();
   }
 
-  getDataBaseMagazine() {
+  async getDataBaseMagazine() {
     if (this.state.loading) return;
 
     const { page } = this.state;
 
     this.setState({ loading: true });
 
-    firebase.database().ref('magazines').once('value', (snapshot) => {
-      const response = snapshot.val();
-      const resposeData = Object.keys(response).map(i => response[i]);
-      console.log('response', resposeData);
+    const responseData = await serviceMagazines.getDataBaseMagazine();
 
-      this.setState({
-        data: resposeData,
-        page: page + 1,
-        loading: false,
-      });
-      console.log('teste', this.state.data);
+    this.setState({
+      data: responseData,
+      page: page + 1,
+      loading: false,
     });
+    console.log('teste', this.state.data);
   }
 
   renderItem = ({ item }) => (
     <View style={styles.listItem}>
       <Image source={{ uri: item.image }} style={styles.imageView} />
       <Text style={styles.textView} >Edição: {item.titulo}</Text>
-      <Text
-        style={{ color: 'red', marginLeft: 7, }}
+      <TouchableHighlight
+        style={styles.button}
         onPress={() => { Linking.openURL(item.link); }}
-      > Ler edição
-      </Text>
+      >
+        <Text style={styles.textEdition}>
+          Ler edição
+        </Text>
+
+      </TouchableHighlight>
     </View>
   );
 
@@ -78,23 +82,3 @@ export default class Magazine extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  textView: {
-    textAlignVertical: 'center',
-    color: '#000',
-    fontSize: 16,
-  },
-  listItem: {
-    flexGrow: 1,
-    backgroundColor: '#EEE',
-    padding: 10
-  },
-  imageView: {
-    flex: 1,
-    width: '100%',
-    height: 220,
-    borderRadius: 7,
-    resizeMode: 'cover',
-  },
-});

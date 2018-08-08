@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './config/ReactotronConfig';
 
 import * as firebase from 'firebase';
-
 import Routes from './src/routes';
 
 export default class App extends Component {
